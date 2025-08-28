@@ -272,7 +272,8 @@ public class ProxyRequestHandler
 
         QueryHistoryManager.QueryDetail queryDetail = getQueryDetailsFromRequest(request, username);
 
-        log.debug("Extracting proxy destination : [%s] for request : [%s]", queryDetail.getBackendUrl(), request.getUri());
+        log.debug("Extracting proxy destination : [%s] for request : [%s], user: [%s]",
+                queryDetail.getBackendUrl(), request.getUri(), username.orElse(null));
 
         if (response.statusCode() == OK.getStatusCode()) {
             try {
@@ -286,7 +287,7 @@ public class ProxyRequestHandler
             }
         }
         else {
-            log.error("Non OK HTTP Status code with response [%s] , Status code [%s]", response.body(), response.statusCode());
+            log.error("Non OK HTTP Status code with response [%s] , Status code [%s], user: [%s]", response.body(), response.statusCode(), username.orElse("unknown"));
         }
         queryHistoryManager.submitQueryDetail(queryDetail);
         return response;
